@@ -7,6 +7,14 @@ Features: {', '.join(product["features"])}"""
 
 # Combine the features for each product
 product_texts = [create_product_text(product) for product in products]
+def create_embeddings(texts):
+response = openai.Embedding.create(
+model="text-embedding-3-small",
+input=texts
+)
+response_dict = response.model_dump()
+return [data['embedding'] for data in response_dict['data']]
+
 
 # Create the embeddings from product_texts
 product_embeddings = create_embeddings(product_texts)
@@ -32,3 +40,22 @@ for hit in hits:
   # Extract the product at each index in hits
   product = products[hit["index"]]
   print(product["title"])
+
+
+
+######################
+# Combine the features for last_product and each product in products
+last_product_text = create_product_text(last_product)
+product_texts = [create_product_text(product) for product in products]
+
+# Embed last_product_text and product_texts
+last_product_embeddings = create_embeddings(last_product_text)[0]
+#print(last_product_embeddings)
+product_embeddings = create_embeddings(product_texts)
+
+# Find the three smallest cosine distances and their indexes
+hits = find_n_closest(last_product_embeddings, product_embeddings)
+
+for hit in hits:
+  product = products[hit['index']]
+  print(product['title'])
