@@ -21,3 +21,14 @@ def find_n_closest(query_vector, embeddings, n=3):
   distances_sorted = sorted(distances,key=lambda x: x["distance"])
   # Return the first n elements in distances_sorted
   return distances_sorted[0:n]
+  # Create the query vector from query_text
+query_text = "computer"
+query_vector = create_embeddings(query_text)[0]
+
+# Find the five closest distances
+hits = find_n_closest(query_vector, product_embeddings,n=5)
+print(f'Search results for "{query_text}"')
+for hit in hits:
+  # Extract the product at each index in hits
+  product = products[hit["index"]]
+  print(product["title"])
