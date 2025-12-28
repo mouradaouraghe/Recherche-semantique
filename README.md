@@ -1,4 +1,4 @@
-## the products dictionnaryà
+## the products dictionnary
 products = [
     {
         "title": "Smartphone X1",
